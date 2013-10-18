@@ -1,0 +1,2 @@
+export GEM_HOME=<%= @deploy[:home] %>/.gems
+export GEM_PATH="$GEM_HOME:/usr/local/lib/ruby/gems/2.0.0"

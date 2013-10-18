@@ -12,4 +12,10 @@ node['deploy'].each do |application, deploy|
     reference  deploy[:scm][:revision]
     user deploy[:user]
   end
+
+  template "/home/#{deploy[:user]}/.bash_profile" do
+    source "bash_profile"
+    user deploy[:user]
+    variables deploy: deploy
+  end
 end

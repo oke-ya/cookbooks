@@ -31,3 +31,7 @@ bash 'install' do
 end
 
 gem_package "bundler"
+package 'libxml2-dev'
+package "libxslt1-dev"
+package "libev-dev"
+package "g++"
