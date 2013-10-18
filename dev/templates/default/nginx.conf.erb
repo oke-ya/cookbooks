@@ -1,0 +1,9 @@
+upstream <%= @application %> {
+    server 127.0.0.1:3000;
+}
+
+server {
+  location / {
+    proxy_pass  http://<%= @application %>;
+  }
+}
