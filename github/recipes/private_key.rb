@@ -2,6 +2,18 @@ node['deploy'].each do |application, deploy|
   ssh_dir = deploy[:home] + '/.ssh'
   private_key_path = "#{ssh_dir}/id_rsa"
 
+  user deploy[:user] do
+    action :create
+    home deploy[:home]
+    shell "/bin/bash"
+  end
+
+  directory deploy[:home] do
+    action :create
+    user deploy[:user]
+    group deploy[:user]
+  end
+
   directory ssh_dir do
     mode   '0700'
     owner deploy[:user]
@@ -13,6 +25,7 @@ node['deploy'].each do |application, deploy|
     mode 0600
     owner deploy[:user]
     group deploy[:group]
+    variables deploy: deploy
   end
 
   execute "generate ssh keys for #{deploy[:user]}." do
