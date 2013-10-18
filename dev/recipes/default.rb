@@ -23,3 +23,10 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
+
+include_recipe 'dev::ruby'
+include_recipe 'bower'
+include_recipe 'dev::mysql'
+include_recipe 'github::private_key'
+include_recipe 'dev::checkout'
+include_recipe 'dev::nginx'
