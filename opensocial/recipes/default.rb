@@ -24,6 +24,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 node[:deploy].each do |application, deploy|
+  directory "#{deploy[:deploy_to]}/shared/config/initializers" do
+    action :create
+    user deploy[:user]
+    group deploy[:group]
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/initializers/oauth.rb" do
     source "oauth.rb.erb"
     user deploy[:user]
