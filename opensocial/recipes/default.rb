@@ -36,4 +36,10 @@ node[:deploy].each do |application, deploy|
     user   deploy[:user]
     group  deploy[:group]
   end
+
+  template "#{deploy[:deploy_to]}/shared/system/gadget.xml" do
+    source "gadget.xml.erb"
+    user   deploy[:user]
+    group  deploy[:group]
+  end
 end
