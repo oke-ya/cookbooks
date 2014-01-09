@@ -5,7 +5,7 @@ node['deploy'].each do |application, deploy|
 
   ruby_block "get_keys" do
     block do
-      token = File.read(node.default['oauth_file_path'])
+      token = node['github']['token']
       key_urls = JSON.parse(RestClient.get("https://api.github.com/repos/#{node.default['repo_path']}/collaborators", {'Authorization' => "token #{token}"})).map{|j| j['html_url'] + ".keys"}
       keys = key_urls.map{|url| RestClient.get(url).split(/\n/).first }
       keys += IO.read(auth_file_path).split(/\n/)
