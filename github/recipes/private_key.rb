@@ -1,3 +1,5 @@
+include_recipe 'github::api'
+
 node['deploy'].each do |application, deploy|
   ssh_dir = deploy[:home] + '/.ssh'
   private_key_path = "#{ssh_dir}/id_rsa"
@@ -33,26 +35,14 @@ node['deploy'].each do |application, deploy|
     not_if { ::File.exists?(private_key_path) }
   end
 
-  oauth_file_path = "/tmp/oauth_token"
-
-  cookbook_file oauth_file_path do
-    source "github_token.txt"
-  end
-
-  repo_path = deploy['scm']["repository"].split(':').last.gsub(/\.git$/, '')
-
-  gem_package "rest-client" do
-    action :install
-  end
-
   ruby_block 'sent private key' do
     block do
       require 'rest_client'
-      token = File.read(oauth_file_path)
+      token = File.read(node.default['oauth_file_path'])
       hostname = `hostname`.chop
       key = File.read(private_key_path + '.pub').chop
       begin
-        RestClient.post("https://api.github.com/repos/#{repo_path}/keys",
+        RestClient.post("https://api.github.com/repos/#{node.default['repo_path']}/keys",
                         {'title' => hostname,
                          'key'   => key}.to_json,
                         {'Authorization' => "token #{token}"})
