@@ -1,4 +1,3 @@
-require 'open-uri'
 include_recipe "github::api"
 
 node['deploy'].each do |application, deploy|
@@ -6,18 +5,30 @@ node['deploy'].each do |application, deploy|
 
   ruby_block "get_keys" do
     block do
+      require 'rest-client'
       token = node['github']['token']
-      key_urls = nil
-      open("https://api.github.com/repos/#{node.default['repo_path']}/collaborators",  {'Authorization' => "token #{token}"}) do |io|
-        key_urls = JSON.parse(io.read).map{|j| j['html_url'] + ".keys"}
+      header = {'Authorization' => "token #{token}"}
+      uri = URI.parse("https://api.github.com/repos/#{node.default['repo_path']}/collaborators")
+      http = Net::HTTP.new(uri.host, uri.port)
+      if uri.scheme == 'https'
+        require 'net/https'
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        store = OpenSSL::X509::Store.new
+        store.set_default_paths
+        http.cert_store = store
       end
-      keys = key_urls.map{|url|
-        key = nil
-        open(url) do |io|
-          key = io.read.split(/\n/).first
-        end
-        key
+      body = nil
+      header["User-Agent"] ||= 'Ruby1.8.7 net/http'
+      http.start {
+        req = Net::HTTP::Get.new(uri.request_uri, header)
+        http.request(req) {|response|
+          body = response.body
+        }
       }
+      key_urls = JSON.parse(body).map{|j| j['html_url'] + ".keys"}
+
+      keys = key_urls.map{|url| RestClient.get(url).split(/\n/).first }
       keys += IO.read(auth_file_path).split(/\n/) if File.exists?(auth_file_path)
       keys.compact!
       keys.reject!{|key| key =~ /^\s*$/}
@@ -25,6 +36,7 @@ node['deploy'].each do |application, deploy|
       node.default["pub_key_file_content"] = keys.join("\n")
     end
     action :nothing
+    subscribes :create, "gem_package[rest-client]"
   end
 
   directory File.dirname(auth_file_path) do
