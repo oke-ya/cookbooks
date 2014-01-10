@@ -48,7 +48,6 @@ node['deploy'].each do |application, deploy|
     action :create
     mode   0700
     owner  (deploy[:user] || "root")
-    group  (deploy[:user] || "root")
   end
   
   file auth_file_path do
