@@ -1,6 +1,11 @@
-include_recipe 'github::api'
-
 node['deploy'].each do |application, deploy|
+
+  node.default['repo_path'] = deploy['scm']["repository"].split(':').last.gsub(/\.git$/, '')
+
+  gem_package "rest-client" do
+    action :install
+  end
+
   ssh_dir = deploy[:home] + '/.ssh'
   private_key_path = "#{ssh_dir}/id_rsa"
 
@@ -38,7 +43,7 @@ node['deploy'].each do |application, deploy|
   ruby_block 'sent private key' do
     block do
       require 'rest_client'
-      token = File.read(node.default['oauth_file_path'])
+      token = node["github"]["token"]
       hostname = `hostname`.chop
       key = File.read(private_key_path + '.pub').chop
       begin

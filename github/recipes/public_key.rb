@@ -1,14 +1,14 @@
-include_recipe "github::api"
+require "open-uri"
 
 node['deploy'].each do |application, deploy|
   auth_file_path = deploy['home'] + "/.ssh/authorized_keys"
 
   ruby_block "get_keys" do
     block do
-      require 'rest-client'
       token = node['github']['token']
       header = {'Authorization' => "token #{token}"}
-      uri = URI.parse("https://api.github.com/repos/#{node.default['repo_path']}/collaborators")
+      repo_path = deploy['scm']["repository"].split(':').last.gsub(/\.git$/, '')
+      uri = URI.parse("https://api.github.com/repos/#{repo_path}/collaborators")
       http = Net::HTTP.new(uri.host, uri.port)
       if uri.scheme == 'https'
         require 'net/https'
@@ -28,7 +28,13 @@ node['deploy'].each do |application, deploy|
       }
       key_urls = JSON.parse(body).map{|j| j['html_url'] + ".keys"}
 
-      keys = key_urls.map{|url| RestClient.get(url).split(/\n/).first }
+      keys = key_urls.map{|url|
+        body = nil
+        open(url) do |f|
+          body = f.read
+        end
+        body.split(/\n/).first
+      }
       keys += IO.read(auth_file_path).split(/\n/) if File.exists?(auth_file_path)
       keys.compact!
       keys.reject!{|key| key =~ /^\s*$/}
@@ -36,7 +42,6 @@ node['deploy'].each do |application, deploy|
       node.default["pub_key_file_content"] = keys.join("\n")
     end
     action :nothing
-    subscribes :create, "gem_package[rest-client]"
   end
 
   directory File.dirname(auth_file_path) do
