@@ -54,6 +54,8 @@ node['deploy'].each do |application, deploy|
   file auth_file_path do
     resources("ruby_block[get_keys]").run_action(:run)
     content node.default["pub_key_file_content"]
+    owner deploy[:user]
+    group deploy[:user]
     subscribes :create, "directory[#{File.dirname(auth_file_path)}]"
   end
 end
