@@ -46,7 +46,7 @@ node['deploy'].each do |application, deploy|
 
   directory File.dirname(auth_file_path) do
     action :create
-    mode   0600
+    mode   0700
     owner  (deploy[:user] || "root")
     group  (deploy[:user] || "root")
   end
