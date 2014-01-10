@@ -27,13 +27,12 @@ node['deploy'].each do |application, deploy|
         }
       }
       key_urls = JSON.parse(body).map{|j| j['html_url'] + ".keys"}
-
       keys = key_urls.map{|url|
         body = nil
         open(url) do |f|
-          body = f.read
+          body = f.read.chop
         end
-        body.split(/\n/).first
+        body.chop.split(/\n/)
       }
       keys += IO.read(auth_file_path).split(/\n/) if File.exists?(auth_file_path)
       keys.compact!
