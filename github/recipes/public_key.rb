@@ -30,9 +30,9 @@ node['deploy'].each do |application, deploy|
       keys = key_urls.map{|url|
         body = nil
         open(url) do |f|
-          body = f.read.chop
+          body = f.read.chomp
         end
-        body.chop.split(/\n/)
+        body.chomp.split(/\n/)
       }
       keys += IO.read(auth_file_path).split(/\n/) if File.exists?(auth_file_path)
       keys.compact!
@@ -53,7 +53,6 @@ node['deploy'].each do |application, deploy|
     resources("ruby_block[get_keys]").run_action(:run)
     content node.default["pub_key_file_content"]
     owner deploy[:user]
-    group deploy[:user]
     subscribes :create, "directory[#{File.dirname(auth_file_path)}]"
   end
 end
