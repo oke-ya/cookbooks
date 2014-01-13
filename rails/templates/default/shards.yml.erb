@@ -1,0 +1,24 @@
+mysql: &mysql
+  adapter: <%= @database[:adapter].to_s.inspect %>
+  database: <%= @database[:database].to_s.inspect %>
+  encoding: <%= (@database[:encoding] || 'utf8').to_s.inspect %>
+  username: <%= @database[:username].to_s.inspect %>
+  password: <%= @database[:password].to_s.inspect %>
+  reconnect: <%= @database[:reconnect] ? 'true' : 'false' %>
+
+octopus:
+  replicated: true
+  environments:
+<% @environments.each do |env| %>
+    - <%= env %>
+<% end %>
+
+<% @environments.each do |env| %>
+  <%= env %>:
+  <% @read_replicas.each.with_index(1) do |replica, i| %>
+    slave<%= i %>:
+      <<: *mysql
+      host: <%= replica['address'] %>
+      port: <%= replica['port'] %>
+  <% end %>
+<% end %>
