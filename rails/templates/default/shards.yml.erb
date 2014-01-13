@@ -15,7 +15,7 @@ octopus:
 
 <% @environments.each do |env| %>
   <%= env %>:
-  <% @read_replicas.each.with_index(1) do |replica, i| %>
+  <% @read_replicas.each_with_index do |replica, i| %>
     slave<%= i %>:
       <<: *mysql
       host: <%= replica['address'] %>

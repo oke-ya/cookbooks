@@ -8,7 +8,7 @@ node[:deploy].each do |application, deploy|
     group deploy[:group]
     owner deploy[:user]
     environments = ['development', 'production'].tap{|_| _ << deploy[:rails_env] }
-    environments.select!{|_| _ && _.length > 0}
+    environments = environments.select{|_| _ && _.length > 0}
 
     variables(:database      => deploy[:database],
               :read_replicas => deploy[:read_replicas],
