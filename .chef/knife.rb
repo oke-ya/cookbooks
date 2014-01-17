@@ -1,1 +1,2 @@
-cookbook_path `git rev-parse --show-toplevel`.chop
+
+cookbook_path ["~/vendor/opsworks-cookbooks", `git rev-parse --show-toplevel`.chop]
