@@ -2,9 +2,9 @@
 include_recipe "td_agent"
 
 node[:deploy].each do |application, deploy|
-  template "/etc/td-agent/conf.d/#{application}" do
+  template "/etc/td-agent/conf.d/#{application}.conf" do
     source "sites.conf.erb"
-    mode 644
+    mode 0644
     owner "root"
     group "root"
 
