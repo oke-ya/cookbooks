@@ -1,7 +1,7 @@
 <source>
   type tail
   format /(?<addr>[^ ]*) - (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>[^ ]*) (?<path>[^\?]*)\?opensocial_app_id=(?<app_id>[^&]*)&opensocial_viewer_id=(?<viewer_id>[^&]*)&opensocial_owner_id=(?<owner_id>[^ ]*)(&(?<args>[^ ]*))? (?<http_version>[^ ]*)" (?<status>[^ ]*) (?<body_bytes_sent>[^ ]*) "(?<referer>[^\"]*)" "(?<agent>[^\"]*)"/
-  path /var/log/nginx/<%= @application %>.log
+  path /var/log/nginx/<%= @application %>.access.log
   pos_file /var/log/td-agent/nginx-<%= @application %>-log.pos
   time_format %d/%b/%Y:%H:%M:%S %z
   tag nginx.access
