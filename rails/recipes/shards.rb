@@ -12,9 +12,7 @@ node[:deploy].each do |application, deploy|
 
     variables(:database      => deploy[:database],
               :read_replicas => deploy[:read_replicas],
-              :environments   => environments)
-
-   notifies :run, "execute[restart Rails app #{application}]"
+              :environments  => environments)
 
     only_if do
       File.exists?("#{deploy[:deploy_to]}") && File.exists?("#{deploy[:deploy_to]}/shared/config/")

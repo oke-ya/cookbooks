@@ -6,6 +6,7 @@ mysql: &mysql
   password: <%= @database[:password].to_s.inspect %>
   reconnect: <%= @database[:reconnect] ? 'true' : 'false' %>
 
+<% if @read_replicas %>
 octopus:
   replicated: true
   environments:
@@ -20,5 +21,6 @@ octopus:
       <<: *mysql
       host: <%= replica['address'] %>
       port: <%= replica['port'] %>
-  <% end %>
+  <% end  %>
+<% end %>
 <% end %>
