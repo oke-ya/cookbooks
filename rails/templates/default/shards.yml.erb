@@ -1,5 +1,5 @@
 mysql: &mysql
-  adapter: <%= @database[:adapter].to_s.inspect %>
+  adapter: mysql2
   database: <%= @database[:database].to_s.inspect %>
   encoding: <%= (@database[:encoding] || 'utf8').to_s.inspect %>
   username: <%= @database[:username].to_s.inspect %>
