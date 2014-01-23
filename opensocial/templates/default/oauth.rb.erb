@@ -3,7 +3,7 @@ Zeroshiki::Application.configure do
     consumer_key    "<%= node[:opensocial][:key]%>"
     consumer_secret "<%= node[:opensocial][:secret]%>"
     app_id          "<%= node[:opensocial][:app_id]%>"
-    sandbox         true
+    sandbox         Rails.env == "production" ? false : true
     session         true
     type            'sp'
   end
