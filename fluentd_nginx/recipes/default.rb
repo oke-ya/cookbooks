@@ -9,11 +9,11 @@ node[:deploy].each do |application, deploy|
     group "root"
 
     s3 = node[:s3]
-    variables(application:  application,
-              aws_key_id:   s3[:access_key],
-              aws_sec_key:  s3[:access_secret],
-              s3_bucket:    s3[:bucket],
-              s3_end_point: s3[:end_point])
+    variables(:application  => application,
+              :aws_key_id   => s3[:access_key],
+              :aws_sec_key  => s3[:access_secret],
+              :s3_bucket    => s3[:bucket],
+              :s3_end_point => s3[:end_point])
     notifies :restart, "service[td-agent]"
   end
 end
