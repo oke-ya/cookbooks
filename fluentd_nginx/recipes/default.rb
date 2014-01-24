@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 include_recipe "td_agent"
 
+directory "/var/log/nginx" do
+  mode 0755
+end
+
 node[:deploy].each do |application, deploy|
   template "/etc/td-agent/conf.d/#{application}.conf" do
     source "sites.conf.erb"
