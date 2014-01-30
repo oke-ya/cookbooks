@@ -12,6 +12,7 @@ apt_repository 'nginx' do
   pkgs.map{|name| "package[#{name}]"}.each do |pkg|
     notifies :upgrade, pkg
   end
+  notifies :create, "directory[/var/log/nginx]"
 end
 
 pkgs.each do |pkg|
