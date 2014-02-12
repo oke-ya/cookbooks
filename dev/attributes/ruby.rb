@@ -1,1 +1,1 @@
-default[:ruby][:version] = '2.0.0-p247'
+default[:ruby][:version] = '2.1.0'
