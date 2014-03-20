@@ -45,10 +45,11 @@ server {
   if (-f "<%= @application[:deploy_to] %>/maintenance" ) {
       set $maintenance true;
   }
-
-  if ($arg_opensocial_viewer_id = "16886067") {
+  <% node[:maintenance_through] && node[:maintenance_through].each do |through| %>
+  if ($arg_opensocial_viewer_id = "<%= through %>") {
       set $maintenance false;
   }
+  <% end %>
 
   if (-f $request_filename) {
      set $maintenance false;
