@@ -1,0 +1,28 @@
+---
+driver:
+  name: docker
+  use_sudo: false
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+    driver_config:
+      image: ubuntu:12.04
+  - name: ubuntu-14.04
+    driver_config:
+      image: ubuntu:14.04
+    attributes:
+      td_agent:
+        version: 2
+
+suites:
+  - name: default
+    run_list:
+      - recipe[td-agent::default]
+    attributes:
+      td_agent:
+        includes: true
+        plugins:
+          - forest
