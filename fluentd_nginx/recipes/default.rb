@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+include_recipe 'td-agent'
 
 directory "/var/log/nginx" do
   mode 0755
