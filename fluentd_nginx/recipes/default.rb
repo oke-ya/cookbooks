@@ -17,7 +17,7 @@ node[:deploy].each do |application, deploy|
               :aws_key_id   => s3[:access_key],
               :aws_sec_key  => s3[:access_secret],
               :s3_bucket    => s3[:bucket],
-              :s3_end_point => s3[:end_point])
+              :s3_region    => s3[:region])
     notifies :restart, "service[td-agent]"
   end
 end

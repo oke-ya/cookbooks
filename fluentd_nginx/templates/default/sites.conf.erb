@@ -12,10 +12,11 @@
   aws_key_id <%= @aws_key_id %>
   aws_sec_key <%= @aws_sec_key %>
   s3_bucket <%= @s3_bucket %>
-  s3_endpoint <%= @s3_end_point %>
+  s3_region <%= @s3_region %>
   path logs/
   buffer_path /var/log/td-agent/s3
-  time_slice_format %Y%m%d/ip-%H
+  time_slice_format %Y%m%d%H
   time_slice_wait 10m
-  #flush_interval 5s
+  utc
+  buffer_chunk_limit 256m
 </match>
