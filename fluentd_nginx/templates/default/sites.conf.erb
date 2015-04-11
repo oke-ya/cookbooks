@@ -1,6 +1,6 @@
 <source>
   type tail
-  format /(?<addr>[^ ]*) - (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>[^ ]*) (?<path>[^\?]*)\?(?<args>[^ ]*)? (?<http_version>[^ ]*)" (?<status>[^ ]*) (?<body_bytes_sent>[^ ]*) "(?<referer>[^\"]*)" "(?<agent>[^\"]*)"/
+  format nginx
   path /var/log/nginx/<%= @application %>.access.log
   pos_file /var/log/td-agent/nginx-<%= @application %>-log.pos
   time_format %d/%b/%Y:%H:%M:%S %z
