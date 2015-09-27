@@ -20,6 +20,6 @@ pkgs.each do |pkg|
     ignore_failure true
     action :nothing
     options '-o Dpkg::Options::="--force-confold"'
-    notifies :restart, "service[nginx]"
+#    notifies :restart, "service[nginx]"
   end
 end
