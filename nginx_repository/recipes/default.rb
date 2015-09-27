@@ -17,7 +17,6 @@ end
 
 pkgs.each do |pkg|
   package pkg do
-    version "1.6.3-1+trusty0" if pkg == "nginx"
     ignore_failure true
     action :nothing
     options '-o Dpkg::Options::="--force-confold"'
